@@ -56,10 +56,12 @@ while True:
         else:
             for bk in res:
                 print(bk)
+                # Showing polymorphism example
+                print("Info:", bk.get_info())
 
     elif ch == "6":
         print("Exiting Program...")
         break
 
     else:
-        print("Invalid choice, please try again.")
+        print("Invalid choice. Try again.")

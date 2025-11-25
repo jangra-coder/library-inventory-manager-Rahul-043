@@ -8,44 +8,51 @@ class Inventory:
         self.books = []
         self.load_data()
 
+    # loads books from json file
     def load_data(self):
-        # load existing book data if file exists
         if os.path.exists(self.filename):
             try:
                 with open(self.filename, "r") as f:
                     data = json.load(f)
                     for b in data:
-                        self.books.append(Book(b["title"], b["author"], b["isbn"], b["status"]))
+                        new_book = Book(b["title"], b["author"], b["isbn"], b["status"])
+                        self.books.append(new_book)
             except:
-                # if file is corrupted or empty
                 self.books = []
         else:
-            # if json file doesn't exist, create empty file
+            # create a new empty file if not available
             with open(self.filename, "w") as f:
                 json.dump([], f)
 
+    # saves books list to json file
     def save_data(self):
-        data = [b.to_dict() for b in self.books]
+        data = []
+        for b in self.books:
+            data.append(b.to_dict())
         with open(self.filename, "w") as f:
             json.dump(data, f, indent=4)
 
+    # add a new book
     def add_book(self, title, author, isbn):
-        newBook = Book(title, author, isbn)
-        self.books.append(newBook)
+        b = Book(title, author, isbn)
+        self.books.append(b)
         self.save_data()
 
-    def search_title(self, keyword):
-        result = []
+    # search by title keyword
+    def search_title(self, key):
+        res = []
         for b in self.books:
-            if keyword.lower() in b.title.lower():
-                result.append(b)
-        return result
+            if key.lower() in b.title.lower():
+                res.append(b)
+        return res
 
+    # search exact isbn
     def search_isbn(self, isbn):
         for b in self.books:
             if b.isbn == isbn:
                 return b
         return None
 
+    # show all books
     def show_all(self):
         return self.books
